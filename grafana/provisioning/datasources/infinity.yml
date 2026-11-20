@@ -1,0 +1,16 @@
+apiVersion: 1
+datasources:
+  - name: Infinity-Gamification
+    uid: infinity-gamification
+    type: yesoreyeram-infinity-datasource
+    access: proxy
+    isDefault: false
+    editable: false
+    jsonData:
+      httpHeaderName1: X-Grafana-Key
+      tlsSkipVerify: false
+      allowedHosts:
+        - http://backend:8000
+        - http://127.0.0.1:8000
+    secureJsonData:
+      httpHeaderValue1: $GRAFANA_INFINITY_KEY

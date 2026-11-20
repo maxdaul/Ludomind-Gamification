@@ -1,0 +1,21 @@
+fastapi~=0.123.10
+uvicorn[standard]~=0.38.0
+sqlalchemy~=2.0.44
+psycopg2-binary
+python-dotenv~=1.2.1
+pydantic~=2.12.5
+python-jose[cryptography]
+passlib
+bcrypt==3.2.2
+requests
+pydantic[email]
+pytest>=9.0.2
+pytest-asyncio
+pytest-html
+pytest-metadata
+httpx
+uvicorn[standard]>=0.30.0
+gunicorn>=21.0.0
+# ML runtime libraries listed in the technical specification
+numpy
+pandas

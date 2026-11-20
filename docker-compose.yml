@@ -1,0 +1,85 @@
+services:
+  backend:
+    build: .
+    image: ${COMPOSE_PROJECT_NAME:-game_industry}-backend
+    env_file: .env.local
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/login', timeout=3)"]
+      interval: 3s
+      timeout: 4s
+      retries: 20
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment: &backend_environment
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_NAME: postgres
+      ALGORITHM: HS256
+      ACCESS_TOKEN_EXPIRE_MINUTES: 60
+      DB_NAME_TEST: tests
+      TESTING: "false"
+      INIT_DB: "false"
+      MOODLE_WS_URL: https://yousai.ru/webservice/rest/server.php
+      YC_MAIL_FUNCTION_URL: https://functions.yandexcloud.net/d4e4mc4f2eq9btl09u1n
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./backend_data:/app/backend_data
+
+  db:
+    env_file: .env.db.local
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+    build:
+      context: .
+      dockerfile: Dockerfile.db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      TZ: UTC
+      PGTZ: UTC
+    command: [
+      "postgres",
+      "-c", "shared_preload_libraries=pg_cron",
+      "-c", "cron.database_name=postgres"
+    ]
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5433:5432"
+
+  deadline-notifications:
+    image: ${COMPOSE_PROJECT_NAME:-game_industry}-backend
+    command: ["python", "deadline_notifications.py"]
+    env_file: .env.local
+    environment: *backend_environment
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+  grafana:
+    env_file: .env.grafana.local
+    image: grafana/grafana:11.6.11
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_INSTALL_PLUGINS: "yesoreyeram-infinity-datasource 4.1.8"
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_SECURITY_ALLOW_EMBEDDING: "true"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
+  grafana_data:

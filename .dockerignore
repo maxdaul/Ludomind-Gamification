@@ -1,0 +1,14 @@
+.git
+.env
+.env.*
+**/node_modules
+**/dist
+**/__pycache__
+**/.pytest_cache
+backend_data
+artifacts
+backend
+mcp
+test_reports
+*.log
+docker-compose.override.yml

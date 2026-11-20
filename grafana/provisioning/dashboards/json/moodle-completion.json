@@ -1,0 +1,122 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "infinity-gamification"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "decimals": 1,
+          "custom": {
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false }
+          },
+          "mappings": []
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Выполнено" },
+            "properties": [
+              {
+                "id": "color",
+                "value": { "fixedColor": "#7c3aed", "mode": "fixed" }
+              }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Осталось" },
+            "properties": [
+              {
+                "id": "color",
+                "value": { "fixedColor": "#a28ff7", "mode": "fixed" }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": { "h": 10, "w": 12, "x": 0, "y": 0 },
+      "id": 2,
+      "options": {
+        "displayLabels": [],
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true,
+          "values": []
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [],
+          "fields": "",
+          "values": true
+        },
+        "tooltip": { "hideZeros": false, "mode": "single", "sort": "none" }
+      },
+      "pluginVersion": "11.6.11",
+      "targets": [
+        {
+          "columns": [
+            { "selector": "Выполнено", "text": "Выполнено", "type": "number" },
+            { "selector": "Осталось", "text": "Осталось", "type": "number" }
+          ],
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "infinity-gamification"
+          },
+          "filters": [],
+          "format": "table",
+          "parser": "backend",
+          "refId": "A",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          "url": "http://backend:8000/internal/grafana/moodle-completion-pie?moodle_user_id=${moodle_user_id}&course_id=${course_id}",
+          "url_options": { "method": "GET" }
+        }
+      ],
+      "title": "Завершение курса (Moodle), %",
+      "type": "piechart"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 39,
+  "tags": ["moodle", "gamification"],
+  "templating": {
+    "list": [
+      {
+        "current": { "selected": false, "text": "0", "value": "0" },
+        "hide": 0,
+        "label": "Moodle user id",
+        "name": "moodle_user_id",
+        "options": [{ "selected": true, "text": "0", "value": "0" }],
+        "query": "0",
+        "skipUrlSync": false,
+        "type": "textbox"
+      },
+      {
+        "current": { "selected": false, "text": "0", "value": "0" },
+        "hide": 0,
+        "label": "Course id",
+        "name": "course_id",
+        "options": [{ "selected": true, "text": "0", "value": "0" }],
+        "query": "0",
+        "skipUrlSync": false,
+        "type": "textbox"
+      }
+    ]
+  },
+  "time": { "from": "now-6h", "to": "now" },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Moodle course completion",
+  "uid": "moodle-completion",
+  "version": 2,
+  "weekStart": ""
+}
