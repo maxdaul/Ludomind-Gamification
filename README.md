@@ -13,12 +13,28 @@ docker compose up -d --build
 Открыть http://localhost:8000. Для остановки использовать `docker compose stop`.
 Не удаляйте тома базы, если данные нужны.
 
-При первом запуске новой копии сначала выполните:
+### Запуск с тестовыми аккаунтами и соревнованиями
+
+При первом запуске выполните из корня проекта:
 
 ```console
 python scripts/setup_local_env.py
+docker compose up -d --build
+```
+
+Если файлы `.env.local`, `.env.db.local` и `.env.grafana.local` уже созданы, выполните сразу `docker compose up -d --build`. При запуске backend подготавливает схему PostgreSQL и загружает `db_backup.sql` в пустую базу. Пользовательские данные при повторных запусках сохраняются. Для входа используйте прежний email и пароль тестового аккаунта.
+
+Для ручного импорта можно запустить `python scripts/restore_demo_db.py`. В дампе находятся тестовые пользователи с хешами паролей, соревнования, справочники и привязки к аккаунтам Moodle.
+
+Содержимое курсов, зачисления и прогресс хранятся в Moodle. Для их отображения задайте в `.env.local` адрес веб-сервиса исходного Moodle в `MOODLE_WS_URL` и его действующий `MOODLE_WS_TOKEN`.
+
+### Запуск с пустой базой
+
+Если локальной конфигурации ещё нет, создайте её через `python scripts/setup_local_env.py`. Чтобы отключить загрузку тестовых данных, задайте `INIT_DEMO_DB=false` в `.env.local` до первого запуска backend.
+
+```console
 docker compose up -d --build db
-docker compose run --rm backend python -c "from database import init_db; init_db()"
+docker compose run --build --rm backend python -c "from database import init_db; init_db()"
 docker compose up -d --build
 ```
 

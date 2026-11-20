@@ -20,7 +20,7 @@ services:
       DB_NAME_TEST: tests
       TESTING: "false"
       INIT_DB: "false"
-      MOODLE_WS_URL: https://yousai.ru/webservice/rest/server.php
+      MOODLE_WS_URL_DEFAULT: https://yousai.ru/webservice/rest/server.php
       YC_MAIL_FUNCTION_URL: https://functions.yandexcloud.net/d4e4mc4f2eq9btl09u1n
     depends_on:
       db:

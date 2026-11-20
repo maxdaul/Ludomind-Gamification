@@ -33,4 +33,3 @@ frontend/dist/
 backend_data/
 .pytest_cache/
 docker-compose.override.yml
-db_backup.sql

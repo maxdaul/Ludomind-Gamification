@@ -305,7 +305,7 @@ def create_validated_task(db, payload, user, actor):
     return task
 
 
-def init_db():
+def init_db(*, seed_defaults=True):
     Base.metadata.create_all(bind=engine)
     with Session(engine) as db:
         db.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS moodle_id INTEGER;"))
@@ -350,6 +350,10 @@ def init_db():
                 SELECT 1 FROM cron.job WHERE jobname = 'mark_overdue_tasks_job'
             );
         """))
+
+        if not seed_defaults:
+            db.commit()
+            return
 
         # Seed only missing dictionary entries; never clear user data.
         status_names = {"todo": "К выполнению", "in_progress": "В работе", "hold done": "Ожидает подтверждения", "done": "Выполнено", "wasted": "Просрочено"}

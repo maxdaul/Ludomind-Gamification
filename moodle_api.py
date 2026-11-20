@@ -45,7 +45,7 @@ def _moodle_post(function: str, data: dict, *, allow_empty: bool = False):
 
 
 def _moodle_config() -> Tuple[str, str]:
-    url = (os.getenv("MOODLE_WS_URL") or "").strip()
+    url = (os.getenv("MOODLE_WS_URL") or os.getenv("MOODLE_WS_URL_DEFAULT") or "").strip()
     token = (os.getenv("MOODLE_WS_TOKEN") or "").strip()
     return url, token
 
